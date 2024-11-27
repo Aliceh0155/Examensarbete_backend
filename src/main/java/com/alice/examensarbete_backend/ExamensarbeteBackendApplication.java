@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class ExamensarbeteBackendApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ExamensarbeteBackendApplication.class, args);
-    }
+        SpringApplication.run(ExamensarbeteBackendApplication.class, args);}
 
 }

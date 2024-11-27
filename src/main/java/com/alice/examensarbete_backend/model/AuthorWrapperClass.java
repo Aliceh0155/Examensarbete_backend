@@ -6,7 +6,7 @@ public class AuthorWrapperClass {
     private List<AuthorApiModel> docs; // List of authors
     private int totalCount; // Total number of authors found
 
-    // Getters and setters
+
     public List<AuthorApiModel> getDocs() {
         return docs;
     }
