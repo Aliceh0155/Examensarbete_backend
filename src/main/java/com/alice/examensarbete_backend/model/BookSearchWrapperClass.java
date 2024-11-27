@@ -2,10 +2,10 @@ package com.alice.examensarbete_backend.model;
 
 import java.util.List;
 
-public class BookWrapperClass {
+public class BookSearchWrapperClass {
 
     private int numFound;
-    private List<BookApiModel> docs;
+    private List<BookSearchApiModel> docs;
 
     public int getNumFound() {
         return numFound;
@@ -15,11 +15,11 @@ public class BookWrapperClass {
         this.numFound = numFound;
     }
 
-    public List<BookApiModel> getDocs() {
+    public List<BookSearchApiModel> getDocs() {
         return docs;
     }
 
-    public void setDocs(List<BookApiModel> docs) {
+    public void setDocs(List<BookSearchApiModel> docs) {
         this.docs = docs;
     }
 }

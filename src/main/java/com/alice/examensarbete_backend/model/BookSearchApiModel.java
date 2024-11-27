@@ -3,7 +3,7 @@ package com.alice.examensarbete_backend.model;
 
 import java.util.List;
 
-public class BookApiModel {
+public class BookSearchApiModel {
 
     private String title;
     private List<String> author_name;
@@ -12,9 +12,9 @@ public class BookApiModel {
     private double ratings_average;
 
 
-    public BookApiModel() {}
+    public BookSearchApiModel() {}
 
-    public BookApiModel(String title, List<String> author_name, List<String> author_key, int first_publish_year, double ratings_average) {
+    public BookSearchApiModel(String title, List<String> author_name, List<String> author_key, int first_publish_year, double ratings_average) {
         this.title = title;
         this.author_name = author_name;
         this.author_key = author_key;

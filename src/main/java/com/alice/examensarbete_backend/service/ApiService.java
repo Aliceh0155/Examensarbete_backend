@@ -1,9 +1,6 @@
 package com.alice.examensarbete_backend.service;
 
-import com.alice.examensarbete_backend.model.AuthorApiModel;
-import com.alice.examensarbete_backend.model.AuthorWrapperClass;
-import com.alice.examensarbete_backend.model.BookApiModel;
-import com.alice.examensarbete_backend.model.BookWrapperClass;
+import com.alice.examensarbete_backend.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -32,10 +29,10 @@ public class ApiService {
         return new ArrayList<>(); // Return an empty list if no authors are found or response is null
     }
 
-    public List<BookApiModel> getBooks(String bookName) {
+    public List<BookSearchApiModel> getBookList(String bookName) {
         String url = "https://openlibrary.org/search.json?q={bookName}";
 
-        BookWrapperClass response = restTemplate.getForObject(url, BookWrapperClass.class, bookName);
+        BookSearchWrapperClass response = restTemplate.getForObject(url, BookSearchWrapperClass.class, bookName);
 
         if (response != null && response.getDocs() != null) {
             return response.getDocs();
@@ -43,4 +40,28 @@ public class ApiService {
         return new ArrayList<>(); // Return an empty list if no books are found or response is null
     }
 
+    public List<AuthorWorksApiModel> getAuthorWorks(String authorId) {
+        String url = "https://openlibrary.org/authors/{authorId}/works.json";
+
+        AuthorWorksWrapperClass response = restTemplate.getForObject(url, AuthorWorksWrapperClass.class, authorId);
+
+        if (response != null && response.getEntries() != null) {
+            return response.getEntries();
+        }
+
+        // Returnera en tom lista om inget hittas
+        return List.of();
+    }
+
+    public OneBookApiModel getOneBook(String bookKey) {
+        String url = "https://openlibrary.org/works/{bookKey}.json";
+
+        OneBookApiModel book = restTemplate.getForObject(url, OneBookApiModel.class, bookKey);
+
+        if (book == null) {
+            throw new RuntimeException("Work not found for key: " + bookKey);
+        }
+
+        return book;
+    }
 }

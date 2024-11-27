@@ -1,7 +1,9 @@
 package com.alice.examensarbete_backend.controller;
 
 import com.alice.examensarbete_backend.model.AuthorApiModel;
-import com.alice.examensarbete_backend.model.BookApiModel;
+import com.alice.examensarbete_backend.model.AuthorWorksApiModel;
+import com.alice.examensarbete_backend.model.BookSearchApiModel;
+import com.alice.examensarbete_backend.model.OneBookApiModel;
 import com.alice.examensarbete_backend.service.ApiService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,8 +30,20 @@ public class ApiController {
     }
 
     @GetMapping("/book/{bookName}")
-    public ResponseEntity<List<BookApiModel>> getBook(@PathVariable String bookName) {
-        List<BookApiModel> book = apiService.getBooks(bookName);
+    public ResponseEntity<List<BookSearchApiModel>> getBook(@PathVariable String bookName) {
+        List<BookSearchApiModel> book = apiService.getBookList(bookName);
+        return ResponseEntity.ok(book);
+    }
+
+    @GetMapping("/author/{authorId}/works")
+    public ResponseEntity<List<AuthorWorksApiModel>> getAuthorWorks(@PathVariable String authorId) {
+        List<AuthorWorksApiModel> works = apiService.getAuthorWorks(authorId);
+        return ResponseEntity.ok(works);
+    }
+
+    @GetMapping("/works/{bookKey}")
+    public ResponseEntity<OneBookApiModel> getOneBook(@PathVariable String bookKey) {
+        OneBookApiModel book = apiService.getOneBook(bookKey);
         return ResponseEntity.ok(book);
     }
 
