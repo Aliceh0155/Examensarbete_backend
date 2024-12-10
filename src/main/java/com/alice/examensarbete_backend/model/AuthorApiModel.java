@@ -8,16 +8,17 @@ public class AuthorApiModel {
     private String death_date;
     private String top_work;
     private int work_count;
+    private String bio;
 
     public AuthorApiModel() {}
 
-    public AuthorApiModel(String key, String name, String birth_date, String death_date, String top_work, int work_count) {
-        this.key = key;
+    public AuthorApiModel(String name, String birth_date, String death_date, String top_work, int work_count, String bio) {
         this.name = name;
         this.birth_date = birth_date;
         this.death_date = death_date;
         this.top_work = top_work;
         this.work_count = work_count;
+        this.bio = bio;
     }
 
     public String getKey() {
@@ -66,5 +67,13 @@ public class AuthorApiModel {
 
     public void setWork_count(int work_count) {
         this.work_count = work_count;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
     }
 }

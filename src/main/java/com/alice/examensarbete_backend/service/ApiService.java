@@ -64,4 +64,15 @@ public class ApiService {
 
         return book;
     }
+
+    public AuthorApiModel getOneAuthor(String authorId) {
+        String url = "https://openlibrary.org/authors/{authorId}.json";
+        AuthorApiModel author = restTemplate.getForObject(url, AuthorApiModel.class, authorId);
+
+        if (author == null) {
+            throw new RuntimeException("Author not found for key: " + authorId);
+        }
+        return author;
+    }
+
 }

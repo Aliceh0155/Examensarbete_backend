@@ -47,4 +47,10 @@ public class ApiController {
         return ResponseEntity.ok(book);
     }
 
+    @GetMapping("/oneAuthor/{authorId}")
+    public ResponseEntity<AuthorApiModel> getOneAuthor(@PathVariable String authorId) {
+        AuthorApiModel author = apiService.getOneAuthor(authorId);
+        return ResponseEntity.ok(author);
+    }
+
 }
