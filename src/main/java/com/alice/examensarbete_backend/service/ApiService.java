@@ -41,6 +41,10 @@ public class ApiService {
     }
 
     public List<AuthorWorksApiModel> getAuthorWorks(String authorId) {
+        if (authorId.startsWith("/authors/")) {
+            authorId = authorId.substring(9);  // Tar bort "/authors/"
+        }
+        System.out.println("Fetching works for authorId: " + authorId);
         String url = "https://openlibrary.org/authors/{authorId}/works.json";
 
         AuthorWorksWrapperClass response = restTemplate.getForObject(url, AuthorWorksWrapperClass.class, authorId);
@@ -54,6 +58,11 @@ public class ApiService {
     }
 
     public OneBookApiModel getOneBook(String bookKey) {
+        if (bookKey.startsWith("/works/")) {
+            bookKey = bookKey.substring(7);
+        }
+
+        System.out.println("BOOK KEY: " +bookKey);
         String url = "https://openlibrary.org/works/{bookKey}.json";
 
         OneBookApiModel book = restTemplate.getForObject(url, OneBookApiModel.class, bookKey);
