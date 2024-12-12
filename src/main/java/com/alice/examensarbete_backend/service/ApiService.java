@@ -2,11 +2,15 @@ package com.alice.examensarbete_backend.service;
 
 import com.alice.examensarbete_backend.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ApiService {
@@ -18,7 +22,23 @@ public class ApiService {
         this.restTemplate = restTemplate;
     }
 
-    public List<AuthorApiModel> getAuthors(String author) {
+//    public List<String> getBookKeysForAuthor(String authorId) {
+//        if (authorId.startsWith("/authors/")) {
+//            authorId = authorId.substring(9);
+//        }
+//        String url = "https://openlibrary.org/authors/{authorId}/works.json";
+//        ResponseEntity<AuthorWorksWrapperClass> response = restTemplate.exchange(url, HttpMethod.GET, null, AuthorWorksWrapperClass.class, authorId);
+//
+//        if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
+//            return response.getBody().getEntries().stream()
+//                    .map(AuthorWorksApiModel::getKey)
+//                    .collect(Collectors.toList());
+//        }
+//        return new ArrayList<>();
+//    }
+
+    //Search for authors by name
+    public List<AuthorApiModel> searchAuthors(String author) {
         String url = "https://openlibrary.org/search/authors.json?q={author}";
 
         AuthorWrapperClass response = restTemplate.getForObject(url, AuthorWrapperClass.class, author);
@@ -29,6 +49,7 @@ public class ApiService {
         return new ArrayList<>(); // Return an empty list if no authors are found or response is null
     }
 
+    //Search for books by title
     public List<BookSearchApiModel> getBookList(String bookName) {
         String url = "https://openlibrary.org/search.json?q={bookName}";
 
@@ -40,6 +61,7 @@ public class ApiService {
         return new ArrayList<>(); // Return an empty list if no books are found or response is null
     }
 
+    //Works(books) by an author(author key)
     public List<AuthorWorksApiModel> getAuthorWorks(String authorId) {
         if (authorId.startsWith("/authors/")) {
             authorId = authorId.substring(9);  // Tar bort "/authors/"
@@ -57,6 +79,7 @@ public class ApiService {
         return List.of();
     }
 
+    //Get one book
     public OneBookApiModel getOneBook(String bookKey) {
         if (bookKey.startsWith("/works/")) {
             bookKey = bookKey.substring(7);
@@ -66,6 +89,10 @@ public class ApiService {
         String url = "https://openlibrary.org/works/{bookKey}.json";
 
         OneBookApiModel book = restTemplate.getForObject(url, OneBookApiModel.class, bookKey);
+
+        if (book.getKey().startsWith("/works/")) {
+            book.setKey(book.getKey().substring(7));
+        }
 
         if (book == null) {
             throw new RuntimeException("Work not found for key: " + bookKey);

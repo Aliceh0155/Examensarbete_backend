@@ -4,6 +4,8 @@ package com.alice.examensarbete_backend.database;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
+
 @Document(collection = "author")
 public class AuthorDocument {
 
@@ -17,6 +19,7 @@ public class AuthorDocument {
   private String top_work;
   private int work_count;
   private String bio;
+  private List<String> bookKeys;
 
   public AuthorDocument() {}
 
@@ -28,6 +31,14 @@ public class AuthorDocument {
     this.top_work = top_work;
     this.work_count = work_count;
     this.bio = bio;
+  }
+
+  public List<String> getBookKeys() {
+    return bookKeys;
+  }
+
+  public void setBookKeys(List<String> bookKeys) {
+    this.bookKeys = bookKeys;
   }
 
   public String getId() {

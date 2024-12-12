@@ -1,5 +1,7 @@
 package com.alice.examensarbete_backend.model;
 
+import java.util.ArrayList;
+
 public class AuthorApiModel {
 
     private String key;
@@ -38,7 +40,7 @@ public class AuthorApiModel {
     }
 
     public String getBirth_date() {
-        return birth_date;
+        return birth_date == null ? "" : birth_date;
     }
 
     public void setBirth_date(String birth_date) {
@@ -46,7 +48,7 @@ public class AuthorApiModel {
     }
 
     public String getDeath_date() {
-        return death_date;
+        return death_date == null ? "" : death_date;
     }
 
     public void setDeath_date(String death_date) {
@@ -54,7 +56,7 @@ public class AuthorApiModel {
     }
 
     public String getTop_work() {
-        return top_work;
+        return top_work == null ? "" : top_work;
     }
 
     public void setTop_work(String top_work) {
@@ -70,7 +72,7 @@ public class AuthorApiModel {
     }
 
     public String getBio() {
-        return bio;
+        return bio == null ? "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat." : bio;
     }
 
     public void setBio(String bio) {
