@@ -1,6 +1,6 @@
 package com.alice.examensarbete_backend.controller;
 
-import com.alice.examensarbete_backend.entity.AuthorEntity;
+import com.alice.examensarbete_backend.entity.AuthorDocument;
 import com.alice.examensarbete_backend.service.DatabaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +28,8 @@ public class DatabaseController {
   }
 
   @GetMapping("/getAuthorsFromDatabase")
-  public ResponseEntity<List<AuthorEntity>> getAllAuthors() {
-    List<AuthorEntity> authors = databaseService.getAllAuthors();
+  public ResponseEntity<List<AuthorDocument>> getAllAuthors() {
+    List<AuthorDocument> authors = databaseService.getAllAuthors();
     return ResponseEntity.ok(authors);
   }
 

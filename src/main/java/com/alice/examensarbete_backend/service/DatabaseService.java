@@ -1,7 +1,7 @@
 package com.alice.examensarbete_backend.service;
 
-import com.alice.examensarbete_backend.entity.AuthorEntity;
-import com.alice.examensarbete_backend.entity.BookEntity;
+import com.alice.examensarbete_backend.entity.AuthorDocument;
+import com.alice.examensarbete_backend.entity.BookDocument;
 import com.alice.examensarbete_backend.model.AuthorApiModel;
 import com.alice.examensarbete_backend.model.AuthorWorksApiModel;
 import com.alice.examensarbete_backend.model.OneBookApiModel;
@@ -29,14 +29,14 @@ public class DatabaseService {
 
   public void addAuthorToDatabase(String authorId) {
     AuthorApiModel authorApiModel = apiService.getOneAuthor(authorId);
-    AuthorEntity authorEntity = convertToAuthorEntity(authorApiModel);
-    authorRepository.save(authorEntity);
+    AuthorDocument authorDocument = convertToAuthorEntity(authorApiModel);
+    authorRepository.save(authorDocument);
 
   }
 
-  public AuthorEntity convertToAuthorEntity(AuthorApiModel authorApiModel) {
+  public AuthorDocument convertToAuthorEntity(AuthorApiModel authorApiModel) {
 
-    return new AuthorEntity(
+    return new AuthorDocument(
             authorApiModel.getKey(),
             authorApiModel.getName(),
             authorApiModel.getBirth_date(),
@@ -47,16 +47,16 @@ public class DatabaseService {
     );
   }
 
-  public List<AuthorEntity> getAllAuthors() {
+  public List<AuthorDocument> getAllAuthors() {
     return authorRepository.findAll();
   }
 
   public void addBooksToDatabase() {
-    List<AuthorEntity> authors = authorRepository.findAll();
+    List<AuthorDocument> authors = authorRepository.findAll();
 
-    for (AuthorEntity authorEntity : authors) {
+    for (AuthorDocument authorDocument : authors) {
 
-      List<AuthorWorksApiModel> works = apiService.getAuthorWorks(authorEntity.getKey());
+      List<AuthorWorksApiModel> works = apiService.getAuthorWorks(authorDocument.getKey());
 
       for (AuthorWorksApiModel work : works) {
 
@@ -72,7 +72,7 @@ public class DatabaseService {
   }
 
   private void saveBookToDatabase(OneBookApiModel bookDetails) {
-    BookEntity book = new BookEntity();
+    BookDocument book = new BookDocument();
     book.setTitle(bookDetails.getTitle());
     book.setKey(bookDetails.getKey());
     book.setDescription(bookDetails.getDescription());

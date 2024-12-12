@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.List;
 
 @Document(collection = "book")
-public class BookEntity {
+public class BookDocument {
 
   @Id
   private String id;
@@ -17,9 +17,9 @@ public class BookEntity {
   private List<Long> covers;
   private List<String> subjects;
 
-  public BookEntity() {}
+  public BookDocument() {}
 
-  public BookEntity(String title, String key, String description, List<Long> covers, List<String> subjects) {
+  public BookDocument(String title, String key, String description, List<Long> covers, List<String> subjects) {
     this.title = title;
     this.key = key;
     this.description = description;

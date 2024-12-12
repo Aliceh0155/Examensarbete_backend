@@ -5,7 +5,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "author")
-public class AuthorEntity {
+public class AuthorDocument {
 
   @Id
   private String id;
@@ -18,9 +18,9 @@ public class AuthorEntity {
   private int work_count;
   private String bio;
 
-  public AuthorEntity() {}
+  public AuthorDocument() {}
 
-  public AuthorEntity(String key, String name, String birth_date, String death_date, String top_work, int work_count, String bio) {
+  public AuthorDocument(String key, String name, String birth_date, String death_date, String top_work, int work_count, String bio) {
     this.key = key;
     this.name = name;
     this.birth_date = birth_date;

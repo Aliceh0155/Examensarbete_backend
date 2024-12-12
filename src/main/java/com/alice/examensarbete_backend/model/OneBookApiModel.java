@@ -3,6 +3,7 @@ package com.alice.examensarbete_backend.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class OneBookApiModel {
@@ -28,7 +29,7 @@ public class OneBookApiModel {
     }
 
     public List<Long> getCovers() {
-        return covers;
+        return covers == null ? new ArrayList<>() : covers;
     }
 
     public void setCovers(List<Long> covers) {
@@ -36,7 +37,7 @@ public class OneBookApiModel {
     }
 
     public List<String> getSubjects() {
-        return subjects;
+        return subjects == null ? new ArrayList<>() : subjects;
     }
 
     public void setSubjects(List<String> subjects) {
@@ -44,7 +45,7 @@ public class OneBookApiModel {
     }
 
     public String getTitle() {
-        return title;
+        return title == null ? "Untitled" : title;
     }
 
     public void setTitle(String title) {
@@ -60,7 +61,7 @@ public class OneBookApiModel {
     }
 
     public String getDescription() {
-        return description;
+        return description == null ? "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat." : description;
     }
 
     public void setDescription(String description) {
