@@ -1,7 +1,7 @@
 package com.alice.examensarbete_backend.service;
 
-import com.alice.examensarbete_backend.entity.AuthorDocument;
-import com.alice.examensarbete_backend.entity.BookDocument;
+import com.alice.examensarbete_backend.database.AuthorDocument;
+import com.alice.examensarbete_backend.database.BookDocument;
 import com.alice.examensarbete_backend.model.AuthorApiModel;
 import com.alice.examensarbete_backend.model.AuthorWorksApiModel;
 import com.alice.examensarbete_backend.model.OneBookApiModel;

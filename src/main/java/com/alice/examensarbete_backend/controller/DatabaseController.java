@@ -1,6 +1,6 @@
 package com.alice.examensarbete_backend.controller;
 
-import com.alice.examensarbete_backend.entity.AuthorDocument;
+import com.alice.examensarbete_backend.database.AuthorDocument;
 import com.alice.examensarbete_backend.service.DatabaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

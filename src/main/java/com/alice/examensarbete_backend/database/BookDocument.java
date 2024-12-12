@@ -1,4 +1,4 @@
-package com.alice.examensarbete_backend.entity;
+package com.alice.examensarbete_backend.database;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
