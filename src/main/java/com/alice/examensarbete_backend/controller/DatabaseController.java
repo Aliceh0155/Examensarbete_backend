@@ -21,13 +21,21 @@ public class DatabaseController {
     this.databaseService = databaseService;
   }
 
+  // Update books cover url
+  @PutMapping("/updateBookCovers")
+  public String updateBookCovers() {
+    databaseService.updateCoverImageUrls();
+    return "Cover images updated successfully!";
+  }
+
+  //Save all authors to database
   @GetMapping("/fetchAndSaveAuthors")
   public String fetchAndSaveAuthors() {
     try {
       databaseService.fetchAndSaveAuthors();
-      return "Författare och böcker har sparats i databasen.";
+      return "Authors saved successfully";
     } catch (Exception e) {
-      return "Fel vid hämtning och sparande av författare och böcker: " + e.getMessage();
+      return "Error while saving authors" + e.getMessage();
     }
   }
 

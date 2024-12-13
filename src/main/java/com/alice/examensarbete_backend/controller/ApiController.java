@@ -17,45 +17,45 @@ import java.util.List;
 @RequestMapping("/api")
 public class ApiController {
 
-    private final ApiService apiService;
+  private final ApiService apiService;
 
-    public ApiController(ApiService apiService) {
-        this.apiService = apiService;
-    }
+  public ApiController(ApiService apiService) {
+    this.apiService = apiService;
+  }
 
-    //Search for authors
-    @GetMapping("/author/{author}")
-    public ResponseEntity<List<AuthorApiModel>> getAuthor(@PathVariable String author) {
-        List<AuthorApiModel> authors = apiService.searchAuthors(author);
-        return ResponseEntity.ok(authors);
-    }
+  //Search for authors
+  @GetMapping("/author/{author}")
+  public ResponseEntity<List<AuthorApiModel>> getAuthor(@PathVariable String author) {
+    List<AuthorApiModel> authors = apiService.searchAuthors(author);
+    return ResponseEntity.ok(authors);
+  }
 
-    //Search for books by title
-    @GetMapping("/book/{bookName}")
-    public ResponseEntity<List<BookSearchApiModel>> getBook(@PathVariable String bookName) {
-        List<BookSearchApiModel> book = apiService.getBookList(bookName);
-        return ResponseEntity.ok(book);
-    }
+  //Search for books by title
+  @GetMapping("/book/{bookName}")
+  public ResponseEntity<List<BookSearchApiModel>> getBook(@PathVariable String bookName) {
+    List<BookSearchApiModel> book = apiService.getBookList(bookName);
+    return ResponseEntity.ok(book);
+  }
 
-    //Works(books) by an author(author key)
-    @GetMapping("/author/{authorId}/works")
-    public ResponseEntity<List<AuthorWorksApiModel>> getAuthorWorks(@PathVariable String authorId) {
-        List<AuthorWorksApiModel> works = apiService.getAuthorWorks(authorId);
-        return ResponseEntity.ok(works);
-    }
+  //Works(books) by an author(author key)
+  @GetMapping("/author/{authorId}/works")
+  public ResponseEntity<List<AuthorWorksApiModel>> getAuthorWorks(@PathVariable String authorId) {
+    List<AuthorWorksApiModel> works = apiService.getAuthorWorks(authorId);
+    return ResponseEntity.ok(works);
+  }
 
-    //Get one book
-    @GetMapping("/works/{bookKey}")
-    public ResponseEntity<OneBookApiModel> getOneBook(@PathVariable String bookKey) {
-        OneBookApiModel book = apiService.getOneBook(bookKey);
-        return ResponseEntity.ok(book);
-    }
+  //Get one book
+  @GetMapping("/works/{bookKey}")
+  public ResponseEntity<OneBookApiModel> getOneBook(@PathVariable String bookKey) {
+    OneBookApiModel book = apiService.getOneBook(bookKey);
+    return ResponseEntity.ok(book);
+  }
 
-    //Get one author
-    @GetMapping("/oneAuthor/{authorId}")
-    public ResponseEntity<AuthorApiModel> getOneAuthor(@PathVariable String authorId) {
-        AuthorApiModel author = apiService.getOneAuthor(authorId);
-        return ResponseEntity.ok(author);
-    }
+  //Get one author
+  @GetMapping("/oneAuthor/{authorId}")
+  public ResponseEntity<AuthorApiModel> getOneAuthor(@PathVariable String authorId) {
+    AuthorApiModel author = apiService.getOneAuthor(authorId);
+    return ResponseEntity.ok(author);
+  }
 
 }

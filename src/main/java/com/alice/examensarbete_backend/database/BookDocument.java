@@ -15,6 +15,7 @@ public class BookDocument {
   private String key;
   private String description;
   private List<Long> covers;
+  private String coverImageUrl;
   private List<String> subjects;
 
   public BookDocument() {}
@@ -25,6 +26,14 @@ public class BookDocument {
     this.description = description;
     this.covers = covers;
     this.subjects = subjects;
+  }
+
+  public String getCoverImageUrl() {
+    return coverImageUrl;
+  }
+
+  public void setCoverImageUrl(String coverImageUrl) {
+    this.coverImageUrl = coverImageUrl;
   }
 
   public String getId() {

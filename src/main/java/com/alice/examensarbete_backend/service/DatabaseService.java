@@ -9,6 +9,7 @@ import com.alice.examensarbete_backend.repository.AuthorRepository;
 import com.alice.examensarbete_backend.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -26,50 +27,61 @@ public class DatabaseService {
     this.bookRepository = bookRepository;
   }
 
-//  // Hårdkodade författar-ID:n
-//  private static final List<String> AUTHOR_IDS = List.of(
-//          "OL23919A", "OL7115219A", "OL32541A", "OL26680A", "OL177745A", "OL26320A", "OL7919580A", "OL8121764A", "OL19450A", "OL31574A", "OL22098A", "OL24638A", "OL113362A", "OL34184A", "OL30765A", "OL27349A", "OL9123091A", "OL7823565A", "OL1478799A", "OL6943290A", "OL28127A", "OL6591369A", "OL7722491A", "OL3072525A", "OL7758106A", "OL7544629A", "OL1425972A", "OL4586796A", "OL23767A", "OL20646A", "OL9180803A"
-//
-//  );
-//
-//  public void fetchAndSaveAuthors() {
-//    for (String authorId : AUTHOR_IDS) {
-//      try {
-//        // Hämta författardata från OpenLibrary
-//        AuthorApiModel authorApiModel = apiService.getOneAuthor(authorId);
-//
-//        String authorKey = authorApiModel.getKey();
-//        if (authorKey != null && authorKey.startsWith("/authors/")) {
-//          authorKey = authorKey.substring(9); // Ta bort "/authors/"
-//        }
-//
-//        // Uppdatera authorApiModel med den rensade key
-//        authorApiModel.setKey(authorKey);
-//
-//        // Hämta boknycklar för författaren
-//        List<String> bookKeys = apiService.getBookKeysForAuthor(authorApiModel.getKey());
-//
-//        // Ta bort prefixet "/works/" från varje boknyckel om det finns
-//        for (int i = 0; i < bookKeys.size(); i++) {
-//          String bookKey = bookKeys.get(i);
-//          if (bookKey != null && bookKey.startsWith("/works/")) {
-//            bookKeys.set(i, bookKey.substring(7)); // Ta bort "/works/"
-//          }
-//        }
-//
-//        // Omvandla AuthorApiModel till AuthorDocument och sätt boknycklarna
-//        AuthorDocument authorDocument = convertToAuthorEntity(authorApiModel);
-//        authorDocument.setBookKeys(bookKeys);
-//
-//        // Spara författaren i databasen
-//        authorRepository.save(authorDocument);
-//
-//      } catch (Exception e) {
-//        System.err.println("Fel vid hantering av författare med ID: " + authorId + " - " + e.getMessage());
-//      }
-//    }
-//  }
+  //Update all books cover url based on cover id
+  public void updateCoverImageUrls() {
+    List<BookDocument> books = bookRepository.findAll();
 
+    for (BookDocument book : books) {
+      System.out.println("BOOK:" + book);
+      if (book.getCovers() != null && !book.getCovers().isEmpty()) {
+        Long coverId = book.getCovers().get(0);
+        String coverImageUrl = "https://covers.openlibrary.org/b/id/" + coverId + "-L.jpg";
+        book.setCoverImageUrl(coverImageUrl);
+        System.out.println("COVER URL: " + coverImageUrl);
+      } else {
+        book.setCoverImageUrl("");
+      }
+    }
+    bookRepository.saveAll(books);
+  }
+
+
+  //List of chosen authors (id)
+  private static final List<String> AUTHOR_IDS = List.of(
+          "OL23919A", "OL7115219A", "OL32541A", "OL26680A", "OL177745A", "OL26320A", "OL7919580A", "OL8121764A", "OL19450A", "OL31574A", "OL22098A", "OL24638A", "OL113362A", "OL34184A", "OL30765A", "OL27349A", "OL9123091A", "OL7823565A", "OL1478799A", "OL6943290A", "OL28127A", "OL6591369A", "OL7722491A", "OL3072525A", "OL7758106A", "OL7544629A", "OL1425972A", "OL4586796A", "OL23767A", "OL20646A", "OL9180803A"
+
+  );
+
+  //Get id and populate the database
+  public void fetchAndSaveAuthors() {
+    for (String authorId : AUTHOR_IDS) {
+      try {
+        AuthorApiModel authorApiModel = apiService.getOneAuthor(authorId);
+
+        String authorKey = authorApiModel.getKey();
+        if (authorKey != null && authorKey.startsWith("/authors/")) {
+          authorKey = authorKey.substring(9);
+        }
+        authorApiModel.setKey(authorKey);
+
+        List<String> bookKeys = apiService.getBookKeysForAuthor(authorApiModel.getKey());
+
+        for (int i = 0; i < bookKeys.size(); i++) {
+          String bookKey = bookKeys.get(i);
+          if (bookKey != null && bookKey.startsWith("/works/")) {
+            bookKeys.set(i, bookKey.substring(7));
+          }
+        }
+        AuthorDocument authorDocument = convertToAuthorEntity(authorApiModel);
+        authorDocument.setBookKeys(bookKeys);
+
+        authorRepository.save(authorDocument);
+
+      } catch (Exception e) {
+        System.err.println("Error while saving author to database: " + authorId + " - " + e.getMessage());
+      }
+    }
+  }
 
 
   //Add one author to the database
@@ -128,10 +140,10 @@ public class DatabaseService {
     book.setDescription(bookDetails.getDescription());
     book.setCovers(bookDetails.getCovers());
     book.setSubjects(bookDetails.getSubjects());
+    book.setCoverImageUrl("");
 
     bookRepository.save(book);
   }
-
 
 
 }
