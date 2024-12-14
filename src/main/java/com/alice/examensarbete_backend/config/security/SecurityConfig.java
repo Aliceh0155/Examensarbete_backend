@@ -38,8 +38,8 @@ public class SecurityConfig {
             .cors(Customizer.withDefaults())
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(auth -> auth
-                    .requestMatchers(HttpMethod.POST, "/","/login","/register").permitAll()
-                    .requestMatchers("/createDefaultUser","/adminPage,","/api/**","/database/**").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/","/user/login","/user/register","/user/addBookToFavorites/").permitAll()
+                    .requestMatchers("/createDefaultUser","/adminPage,","/api/**","/database/**", "/user/**").permitAll()
                     .anyRequest()
                     .authenticated()
             )

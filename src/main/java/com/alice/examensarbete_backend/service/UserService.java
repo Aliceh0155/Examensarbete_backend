@@ -8,6 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+
 @Service
 public class UserService {
 
@@ -20,6 +24,97 @@ public class UserService {
     this.passwordEncoder = passwordEncoder;
   }
 
+  //Get a users want to read list
+  public List<String> getWantToRead(String username) {
+    Optional<CustomUser> customUser = userRepository.findByUsername(username);
+    if (customUser.isEmpty()) {
+      throw new NoSuchElementException("User not found");
+    }
+    CustomUser user = customUser.get();
+    return user.getWantToRead();
+  }
+
+  //Add a book to a users want to read list
+  public String addBookToWantToRead(String username, String bookId) {
+    Optional<CustomUser> customUser = userRepository.findByUsername(username);
+    if (customUser.isEmpty()) {
+      return "User not found";
+    }
+
+    CustomUser user = customUser.get();
+    List<String> wantToReadBookId = user.getWantToRead();
+
+    if (!wantToReadBookId.contains(bookId)) {
+      wantToReadBookId.add(bookId);
+      user.setWantToRead(wantToReadBookId);
+      userRepository.save(user);
+      return "Book added to want to read list";
+    }
+
+    return "This book is already in your want to read list";
+  }
+
+  //Get a users currently reading list
+  public List<String> getCurrentlyReading(String username) {
+    Optional<CustomUser> customUser = userRepository.findByUsername(username);
+    if (customUser.isEmpty()) {
+      throw new NoSuchElementException("User not found");
+    }
+    CustomUser user = customUser.get();
+    return user.getCurrentlyReading();
+  }
+
+  //Add a book to a users currently reading list
+  public String addBookToCurrentlyReading(String username, String bookId) {
+    Optional<CustomUser> customUser = userRepository.findByUsername(username);
+    if (customUser.isEmpty()) {
+      return "User not found";
+    }
+
+    CustomUser user = customUser.get();
+    List<String> currentlyReadingBookId = user.getCurrentlyReading();
+
+    if (!currentlyReadingBookId.contains(bookId)) {
+      currentlyReadingBookId.add(bookId);
+      user.setCurrentlyReading(currentlyReadingBookId);
+      userRepository.save(user);
+      return "Book added to currently reading list";
+    }
+
+    return "This book is already in your currently reading list";
+  }
+
+  //Get a users favorite books list
+  public List<String> getFavoriteBooks(String username) {
+    Optional<CustomUser> customUser = userRepository.findByUsername(username);
+    if (customUser.isEmpty()) {
+      throw new NoSuchElementException("User not found");
+    }
+    CustomUser user = customUser.get();
+    return user.getFavoriteBooks();
+  }
+
+  //Add a book to a users favorites list
+  public String addBookToFavorites(String username, String bookId) {
+    Optional<CustomUser> customUser = userRepository.findByUsername(username);
+    if (customUser.isEmpty()) {
+      return "User not found";
+    }
+
+    CustomUser user = customUser.get();
+    List<String> favoriteBookId = user.getFavoriteBooks();
+
+    if (!favoriteBookId.contains(bookId)) {
+      favoriteBookId.add(bookId);
+      user.setFavoriteBooks(favoriteBookId);
+      userRepository.save(user);
+      return "Book added to favorite books list";
+    }
+
+    return "This book is already in your favorites list";
+  }
+
+  //Register a user
   public String registerUser(CustomUserLoginDTO userDto) {
     if (userRepository.existsByUsername(userDto.getUsername())) {
       return "Username is already taken";
