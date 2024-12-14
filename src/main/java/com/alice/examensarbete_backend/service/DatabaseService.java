@@ -27,6 +27,27 @@ public class DatabaseService {
     this.bookRepository = bookRepository;
   }
 
+  //Get one book from database
+  public BookDocument getBookById(String id) {
+    return bookRepository.findById(id).orElseThrow(() -> new RuntimeException("Book not found with id: " + id));
+  }
+
+  //Get all books from database
+  public List<BookDocument> getAllBooks() {
+    return bookRepository.findAll();
+  }
+
+  //Get one author from database
+  public AuthorDocument getAuthorById(String id) {
+    return authorRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Author not found with id: " + id));
+  }
+
+  //Get all authors from database
+  public List<AuthorDocument> getAllAuthors() {
+    return authorRepository.findAll();
+  }
+
   //Update all books cover url based on cover id
   public void updateCoverImageUrls() {
     List<BookDocument> books = bookRepository.findAll();
@@ -106,10 +127,6 @@ public class DatabaseService {
     return authorDocument;
   }
 
-  //Get all authors from database
-  public List<AuthorDocument> getAllAuthors() {
-    return authorRepository.findAll();
-  }
 
   //Add all authors works(books) to the database
   public void addBooksToDatabase() {
