@@ -17,15 +17,25 @@ public class BookDocument {
   private List<Long> covers;
   private String coverImageUrl;
   private List<String> subjects;
+  private double ratingsAverage;
 
   public BookDocument() {}
 
-  public BookDocument(String title, String key, String description, List<Long> covers, List<String> subjects) {
+  public BookDocument(double ratingsAverage,String title, String key, String description, List<Long> covers, List<String> subjects) {
     this.title = title;
     this.key = key;
     this.description = description;
     this.covers = covers;
     this.subjects = subjects;
+    this.ratingsAverage = ratingsAverage;
+  }
+
+  public double getRatingsAverage() {
+    return ratingsAverage;
+  }
+
+  public void setRatingsAverage(double ratingsAverage) {
+    this.ratingsAverage = ratingsAverage;
   }
 
   public String getCoverImageUrl() {

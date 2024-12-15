@@ -10,6 +10,7 @@ import com.alice.examensarbete_backend.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 @Service
@@ -158,9 +159,16 @@ public class DatabaseService {
     book.setCovers(bookDetails.getCovers());
     book.setSubjects(bookDetails.getSubjects());
     book.setCoverImageUrl("");
+    book.setRatingsAverage(generateRating());
 
     bookRepository.save(book);
   }
+
+  public double generateRating() {
+    double randomRating = 1.0 + (4.6 - 1.0) * Math.random();
+    return Math.round(randomRating * 100.0) / 100.0;
+  }
+
 
 
 }
