@@ -68,11 +68,6 @@ public class ApiService {
       authorId = authorId.substring(9);  // Tar bort "/authors/"
     }
     System.out.println("Fetching works for authorId: " + authorId);
-//    try {
-//      Thread.sleep(3000);
-//    } catch (InterruptedException e) {
-//      Thread.currentThread().interrupt();
-//    }
     String url = "https://openlibrary.org/authors/{authorId}/works.json?limit=50";
     AuthorWorksWrapperClass response = restTemplate.getForObject(url, AuthorWorksWrapperClass.class, authorId);
     if (response != null && response.getEntries() != null) {
@@ -103,6 +98,7 @@ public class ApiService {
     return book;
   }
 
+  //Get one author
   public AuthorApiModel getOneAuthor(String authorId) {
     String url = "https://openlibrary.org/authors/{authorId}.json";
     AuthorApiModel author = restTemplate.getForObject(url, AuthorApiModel.class, authorId);

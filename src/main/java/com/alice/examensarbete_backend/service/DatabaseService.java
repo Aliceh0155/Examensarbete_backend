@@ -30,7 +30,8 @@ public class DatabaseService {
 
   //Get one book from database
   public BookDocument getBookById(String id) {
-    return bookRepository.findById(id).orElseThrow(() -> new RuntimeException("Book not found with id: " + id));
+    return bookRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Book not found with id: " + id));
   }
 
   //Get all books from database
