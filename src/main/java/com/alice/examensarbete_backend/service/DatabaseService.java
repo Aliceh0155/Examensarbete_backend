@@ -146,13 +146,13 @@ public class DatabaseService {
           bookDetails.setKey(bookDetails.getKey().substring(7));
         }
 
-        saveBookToDatabase(bookDetails);
+        saveBookToDatabase(bookDetails, authorDocument);
       }
     }
   }
 
   //Convert from book model to book document and save to database
-  private void saveBookToDatabase(OneBookApiModel bookDetails) {
+  private void saveBookToDatabase(OneBookApiModel bookDetails, AuthorDocument authorDocument) {
     BookDocument book = new BookDocument();
     book.setTitle(bookDetails.getTitle());
     book.setKey(bookDetails.getKey());
@@ -161,6 +161,8 @@ public class DatabaseService {
     book.setSubjects(bookDetails.getSubjects());
     book.setCoverImageUrl("");
     book.setRatingsAverage(generateRating());
+    book.setAuthorName(authorDocument.getName());
+    book.setAuthorKey(authorDocument.getKey());
 
     bookRepository.save(book);
   }

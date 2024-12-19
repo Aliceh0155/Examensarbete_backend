@@ -18,6 +18,9 @@ public class BookDocument {
   private String coverImageUrl;
   private List<String> subjects;
   private double ratingsAverage;
+  private String authorKey;
+  private String authorName;
+
 
   public BookDocument() {}
 
@@ -28,7 +31,25 @@ public class BookDocument {
     this.covers = covers;
     this.subjects = subjects;
     this.ratingsAverage = ratingsAverage;
+
   }
+
+  public String getAuthorKey() {
+    return authorKey;
+  }
+
+  public void setAuthorKey(String authorKey) {
+    this.authorKey = authorKey;
+  }
+
+  public String getAuthorName() {
+    return authorName;
+  }
+
+  public void setAuthorName(String authorName) {
+    this.authorName = authorName;
+  }
+
 
   public double getRatingsAverage() {
     return ratingsAverage;
