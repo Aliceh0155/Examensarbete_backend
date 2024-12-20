@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DatabaseService {
@@ -28,6 +29,18 @@ public class DatabaseService {
     this.bookRepository = bookRepository;
   }
 
+  // Get books by an author
+  public List<String> getBooksByAuthorId(String authorKey) {
+    Optional<AuthorDocument> author = authorRepository.findByKey(authorKey);
+    if (author.isPresent()) {
+      AuthorDocument authorDocument = author.get();
+      System.out.println("Found author: " + authorDocument.getName());
+      return authorDocument.getBookKeys();
+    } else {
+      throw new RuntimeException("Author not found");
+    }
+  }
+
   //Get one book from database
   public BookDocument getBookById(String id) {
     return bookRepository.findById(id)
@@ -40,10 +53,15 @@ public class DatabaseService {
   }
 
   //Get one author from database
-  public AuthorDocument getAuthorById(String id) {
-    return authorRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Author not found with id: " + id));
+  public AuthorDocument getAuthorByKey(String key) {
+    return authorRepository.findByKey(key)
+            .orElseThrow(() -> new RuntimeException("Author not found with key: " + key));
   }
+//  public AuthorDocument getAuthorById(String id) {
+//    return authorRepository.findById(id)
+//            .orElseThrow(() -> new RuntimeException("Author not found with id: " + id));
+//  }
+
 
   //Get all authors from database
   public List<AuthorDocument> getAllAuthors() {
