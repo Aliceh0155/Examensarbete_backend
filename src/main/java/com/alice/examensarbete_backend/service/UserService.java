@@ -54,6 +54,26 @@ public class UserService {
     return "This book is already in your want to read list";
   }
 
+  // Remove a book from a users want to read list
+  public String removeBookFromWantToRead(String username, String bookId) {
+    Optional<CustomUser> customUser = userRepository.findByUsername(username);
+    if (customUser.isEmpty()) {
+      return "User not found";
+    }
+
+    CustomUser user = customUser.get();
+    List<String> wantToReadBookId = user.getWantToRead();
+
+    if (wantToReadBookId.contains(bookId)) {
+      wantToReadBookId.remove(bookId);
+      user.setWantToRead(wantToReadBookId);
+      userRepository.save(user);
+      return "Book removed from want to read list";
+    }
+
+    return "This book is not in your want to read list";
+  }
+
   //Get a users currently reading list
   public List<String> getCurrentlyReading(String username) {
     Optional<CustomUser> customUser = userRepository.findByUsername(username);
@@ -84,6 +104,26 @@ public class UserService {
     return "This book is already in your currently reading list";
   }
 
+  // Remove a book from a users currently reading list
+  public String removeBookFromCurrentlyReading(String username, String bookId) {
+    Optional<CustomUser> customUser = userRepository.findByUsername(username);
+    if (customUser.isEmpty()) {
+      return "User not found";
+    }
+
+    CustomUser user = customUser.get();
+    List<String> currentlyReadingBookId = user.getCurrentlyReading();
+
+    if (currentlyReadingBookId.contains(bookId)) {
+      currentlyReadingBookId.remove(bookId);
+      user.setCurrentlyReading(currentlyReadingBookId);
+      userRepository.save(user);
+      return "Book removed from currently reading list";
+    }
+
+    return "This book is not in your currently reading list";
+  }
+
   //Get a users favorite books list
   public List<String> getFavoriteBooks(String username) {
     Optional<CustomUser> customUser = userRepository.findByUsername(username);
@@ -112,6 +152,26 @@ public class UserService {
     }
 
     return "This book is already in your favorites list";
+  }
+
+  // Remove a book from a users favorites list
+  public String removeBookFromFavorites(String username, String bookId) {
+    Optional<CustomUser> customUser = userRepository.findByUsername(username);
+    if (customUser.isEmpty()) {
+      return "User not found";
+    }
+
+    CustomUser user = customUser.get();
+    List<String> favoriteBookId = user.getFavoriteBooks();
+
+    if (favoriteBookId.contains(bookId)) {
+      favoriteBookId.remove(bookId);
+      user.setFavoriteBooks(favoriteBookId);
+      userRepository.save(user);
+      return "Book removed from favorite books list";
+    }
+
+    return "This book is not in your favorites list";
   }
 
   //Register a user

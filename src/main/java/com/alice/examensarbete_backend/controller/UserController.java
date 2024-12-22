@@ -65,6 +65,23 @@ public class UserController {
     return ResponseEntity.ok(result);
   }
 
+  // Remove a book from a users want to read list
+  @DeleteMapping("/removeBookFromWantToRead/{bookId}")
+  public ResponseEntity<String> removeBookFromWantToRead(@PathVariable String bookId) {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    String username = authentication.getName();
+
+    String result = userService.removeBookFromWantToRead(username, bookId);
+
+    if ("User not found".equals(result)) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+    } else if ("This book is not in your want to read list".equals(result)) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
+    }
+
+    return ResponseEntity.ok(result);
+  }
+
   //Get a users currently reading list
   @GetMapping("/getCurrentlyReading")
   public ResponseEntity<List<String>> getCurrentlyReading() {
@@ -96,6 +113,23 @@ public class UserController {
     return ResponseEntity.ok(result);
   }
 
+  // Remove a book from a users currently reading list
+  @DeleteMapping("/removeBookFromCurrentlyReading/{bookId}")
+  public ResponseEntity<String> removeBookFromCurrentlyReading(@PathVariable String bookId) {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    String username = authentication.getName();
+
+    String result = userService.removeBookFromCurrentlyReading(username, bookId);
+
+    if ("User not found".equals(result)) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+    } else if ("This book is not in your currently reading list".equals(result)) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
+    }
+
+    return ResponseEntity.ok(result);
+  }
+
   //Get a users favorite books list
   @GetMapping("/getFavoriteBooks")
   public ResponseEntity<List<String>> getFavoriteBooks() {
@@ -121,6 +155,23 @@ public class UserController {
     if ("User not found".equals(result)) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
     } else if ("This book is already in your favorites list".equals(result)) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
+    }
+
+    return ResponseEntity.ok(result);
+  }
+
+  // Remove a book from a users favorites list
+  @DeleteMapping("/removeBookFromFavorites/{bookId}")
+  public ResponseEntity<String> removeBookFromFavorites(@PathVariable String bookId) {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    String username = authentication.getName();
+
+    String result = userService.removeBookFromFavorites(username, bookId);
+
+    if ("User not found".equals(result)) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+    } else if ("This book is not in your favorites list".equals(result)) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
     }
 
