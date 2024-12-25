@@ -218,12 +218,9 @@ public class UserController {
 
 
   @GetMapping("/createDefaultUser")
-  public CustomUser createDefaultUser() {
-    return userService.createDefaultUser();
+  public ResponseEntity<CustomUser> createDefaultUser() {
+      return ResponseEntity.ok(userService.createDefaultUser());
   }
 
-  @GetMapping("/adminPage")
-  public String adminPage() {
-    return userService.getAdminPageContent();
-  }
+
 }

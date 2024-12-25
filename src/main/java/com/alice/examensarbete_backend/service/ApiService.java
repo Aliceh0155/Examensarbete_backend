@@ -22,6 +22,7 @@ public class ApiService {
     this.restTemplate = restTemplate;
   }
 
+  // TODO
   //Get book keys from books by an author
   public List<String> getBookKeysForAuthor(String authorId) {
     if (authorId.startsWith("/authors/")) {
@@ -38,6 +39,8 @@ public class ApiService {
     return new ArrayList<>();
   }
 
+  // TODO
+
   //Search for authors by name
   public List<AuthorApiModel> searchAuthors(String author) {
     String url = "https://openlibrary.org/search/authors.json?q={author}";
@@ -47,7 +50,7 @@ public class ApiService {
     if (response != null && response.getDocs() != null) {
       return response.getDocs();
     }
-    return new ArrayList<>(); // Return an empty list if no authors are found or response is null
+    return new ArrayList<>();
   }
 
   //Search for books by title
@@ -59,42 +62,43 @@ public class ApiService {
     if (response != null && response.getDocs() != null) {
       return response.getDocs();
     }
-    return new ArrayList<>(); // Return an empty list if no books are found or response is null
+    return new ArrayList<>();
   }
 
   //Get works(books) by an author
   public List<AuthorWorksApiModel> getAuthorWorks(String authorId) {
     if (authorId.startsWith("/authors/")) {
-      authorId = authorId.substring(9);  // Tar bort "/authors/"
+      authorId = authorId.substring(9);
     }
+
     System.out.println("Fetching works for authorId: " + authorId);
     String url = "https://openlibrary.org/authors/{authorId}/works.json?limit=50";
+
     AuthorWorksWrapperClass response = restTemplate.getForObject(url, AuthorWorksWrapperClass.class, authorId);
     if (response != null && response.getEntries() != null) {
       return response.getEntries();
     }
-    return List.of();
+
+    return new ArrayList<>();
   }
 
   //Get one book
   public OneBookApiModel getOneBook(String bookKey) {
-    if (bookKey.startsWith("/works/")) {
+    if (bookKey !=null && bookKey.startsWith("/works/")) {
       bookKey = bookKey.substring(7);
     }
+      System.out.println("BOOK KEY: " + bookKey);
 
-    System.out.println("BOOK KEY: " + bookKey);
     String url = "https://openlibrary.org/works/{bookKey}.json";
-
     OneBookApiModel book = restTemplate.getForObject(url, OneBookApiModel.class, bookKey);
-
-    if (book.getKey().startsWith("/works/")) {
-      book.setKey(book.getKey().substring(7));
-    }
 
     if (book == null) {
       throw new RuntimeException("Work not found for key: " + bookKey);
     }
 
+    if (book.getKey().startsWith("/works/")) {
+      book.setKey(book.getKey().substring(7));
+    }
     return book;
   }
 

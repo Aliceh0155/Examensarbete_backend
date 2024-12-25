@@ -38,11 +38,19 @@ public class SecurityConfig {
             .cors(Customizer.withDefaults())
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(auth -> auth
-                    .requestMatchers(HttpMethod.POST, "/","/user/login","/user/register","/user/addBookToFavorites/").permitAll()
-                    .requestMatchers("/createDefaultUser","/adminPage","/api/**","/database/**", "/user/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/**", "/user/createDefaultUser", "/database/fetchAndSaveAuthors", "/database/getAllAuthorsFromDatabase", "/database/getOneAuthorFromDatabase/**", "/database/getAllBooksFromDatabase", "/database/getOneBookFromDatabase/**", "/database/booksByAuthor/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/user/getWantToRead", "/user/getCurrentlyReading", "/user/getFavoriteBooks").authenticated()
+
+                    .requestMatchers(HttpMethod.POST, "/user/login", "/user/register", "/database/addBooksToDatabase", "/database/addAuthor/**").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/user/addBookToWantToRead/**", "/user/addBookToCurrentlyReading/**", "/user/addBookToFavorites/**").authenticated()
+
+                    .requestMatchers(HttpMethod.PUT, "/database/updateBookCovers").permitAll()
+
+                    .requestMatchers(HttpMethod.DELETE, "/user/removeBookFromWantToRead/**", "/user/removeBookFromCurrentlyReading/**", "/user/removeBookFromFavorites/**").authenticated()
+
+
                     .anyRequest()
-                    .authenticated()
-            )
+                    .authenticated())
             .sessionManagement(session -> session
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )

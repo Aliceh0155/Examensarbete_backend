@@ -10,6 +10,7 @@ import com.alice.examensarbete_backend.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Book;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Optional;
@@ -32,9 +33,10 @@ public class DatabaseService {
   // Get books by an author
   public List<String> getBooksByAuthorId(String authorKey) {
     Optional<AuthorDocument> author = authorRepository.findByKey(authorKey);
+
     if (author.isPresent()) {
       AuthorDocument authorDocument = author.get();
-      System.out.println("Found author: " + authorDocument.getName());
+      System.out.println("Author: " + authorDocument.getName());
       return authorDocument.getBookKeys();
     } else {
       throw new RuntimeException("Author not found");
@@ -57,33 +59,33 @@ public class DatabaseService {
     return authorRepository.findByKey(key)
             .orElseThrow(() -> new RuntimeException("Author not found with key: " + key));
   }
-//  public AuthorDocument getAuthorById(String id) {
-//    return authorRepository.findById(id)
-//            .orElseThrow(() -> new RuntimeException("Author not found with id: " + id));
-//  }
 
 
   //Get all authors from database
   public List<AuthorDocument> getAllAuthors() {
-    return authorRepository.findAll();
+      return authorRepository.findAll();
   }
 
-  //Update all books cover url based on cover id
+  //Update all book covers url based on cover id
   public void updateCoverImageUrls() {
     List<BookDocument> books = bookRepository.findAll();
-
-    for (BookDocument book : books) {
-      System.out.println("BOOK:" + book);
-      if (book.getCovers() != null && !book.getCovers().isEmpty()) {
-        Long coverId = book.getCovers().get(0);
-        String coverImageUrl = "https://covers.openlibrary.org/b/id/" + coverId + "-L.jpg";
-        book.setCoverImageUrl(coverImageUrl);
-        System.out.println("COVER URL: " + coverImageUrl);
-      } else {
-        book.setCoverImageUrl("");
+    try {
+      for (BookDocument book : books) {
+        System.out.println("BOOK:" + book);
+        if (book.getCovers() != null && !book.getCovers().isEmpty()) {
+          Long coverId = book.getCovers().get(0);
+          String coverImageUrl = "https://covers.openlibrary.org/b/id/" + coverId + "-L.jpg";
+          book.setCoverImageUrl(coverImageUrl);
+          System.out.println("COVER URL: " + coverImageUrl);
+        } else {
+          book.setCoverImageUrl("");
+        }
       }
+
+      bookRepository.saveAll(books);
+    }catch (Exception e){
+      System.err.println("Could not update book covers" + e.getMessage());
     }
-    bookRepository.saveAll(books);
   }
 
 
@@ -93,7 +95,7 @@ public class DatabaseService {
 
   );
 
-  //Get id and populate the database
+  //Get list of authors to database via id
   public void fetchAndSaveAuthors() {
     for (String authorId : AUTHOR_IDS) {
       try {
@@ -119,7 +121,7 @@ public class DatabaseService {
         authorRepository.save(authorDocument);
 
       } catch (Exception e) {
-        System.err.println("Error while saving author to database: " + authorId + " - " + e.getMessage());
+        System.err.println("Error while saving authors to database: " + authorId + e.getMessage());
       }
     }
   }
@@ -127,9 +129,13 @@ public class DatabaseService {
 
   //Add one author to the database
   public void addAuthorToDatabase(String authorId) {
-    AuthorApiModel authorApiModel = apiService.getOneAuthor(authorId);
-    AuthorDocument authorDocument = convertToAuthorEntity(authorApiModel);
-    authorRepository.save(authorDocument);
+    try {
+      AuthorApiModel authorApiModel = apiService.getOneAuthor(authorId);
+      AuthorDocument authorDocument = convertToAuthorEntity(authorApiModel);
+      authorRepository.save(authorDocument);
+    } catch (Exception e) {
+      System.err.println("Error while saving author to database: " + authorId + " - " + e.getMessage());
+    }
 
   }
 
@@ -150,27 +156,29 @@ public class DatabaseService {
 
   //Add all authors works(books) to the database
   public void addBooksToDatabase() {
-    List<AuthorDocument> authors = authorRepository.findAll();
+    try {
+      List<AuthorDocument> authors = authorRepository.findAll();
 
-    for (AuthorDocument authorDocument : authors) {
+      for (AuthorDocument authorDocument : authors) {
+        List<AuthorWorksApiModel> works = apiService.getAuthorWorks(authorDocument.getKey());
 
-      List<AuthorWorksApiModel> works = apiService.getAuthorWorks(authorDocument.getKey());
+        for (AuthorWorksApiModel work : works) {
+          OneBookApiModel bookDetails = apiService.getOneBook(work.getKey());
 
-      for (AuthorWorksApiModel work : works) {
-
-        OneBookApiModel bookDetails = apiService.getOneBook(work.getKey());
-
-        if (bookDetails.getKey() != null && bookDetails.getKey().startsWith("/works/")) {
-          bookDetails.setKey(bookDetails.getKey().substring(7));
+          if (bookDetails.getKey() != null && bookDetails.getKey().startsWith("/works/")) {
+            bookDetails.setKey(bookDetails.getKey().substring(7));
+          }
+          BookDocument bookDocument = convertAndSaveBookToDatabase(bookDetails, authorDocument);
+          bookRepository.save(bookDocument);
         }
-
-        saveBookToDatabase(bookDetails, authorDocument);
       }
+    } catch (Exception e) {
+      System.err.println("Error while saving books to database: " + e.getMessage());
     }
   }
 
   //Convert from book model to book document and save to database
-  private void saveBookToDatabase(OneBookApiModel bookDetails, AuthorDocument authorDocument) {
+  private BookDocument convertAndSaveBookToDatabase(OneBookApiModel bookDetails, AuthorDocument authorDocument) {
     BookDocument book = new BookDocument();
     book.setTitle(bookDetails.getTitle());
     book.setKey(bookDetails.getKey());
@@ -182,14 +190,14 @@ public class DatabaseService {
     book.setAuthorName(authorDocument.getName());
     book.setAuthorKey(authorDocument.getKey());
 
-    bookRepository.save(book);
+    return book;
   }
 
+  //Generate a random rating to use as Ratings Average
   public double generateRating() {
     double randomRating = 1.0 + (4.6 - 1.0) * Math.random();
     return Math.round(randomRating * 100.0) / 100.0;
   }
-
 
 
 }
